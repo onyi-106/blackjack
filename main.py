@@ -31,93 +31,43 @@
 #Hint 3: Download and read this flow chart I've created: 
 #   https://drive.google.com/uc?export=download&id=1rDkiHCrhaf9eX7u7yjM1qwSuyEk-rPnt
 import random
-
-
 cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
 
-from art import logo
-
-print(logo)
-
-#1. MAKE THE ACTION CODE (HIT/STAND) IN A WHILE LOOP
-#1.a. IF THE PLAYER WENT OVER 21 IMMEDIATELY LOSE
-def blackjack():
-  player_cards = []
-  player_cards_summed = 0
+blackjack_info = {
+  "player": {"cards": [], "score": 0},
+  "dealer": {"cards": [], "score": 0}
+}
+#Function to access dealer / player cards
+def access_cards(person):
+  """person = player/dealer"""
+  return blackjack_info[person]["cards"]
   
-  dealer_cards = []
-  dealer_cards_summed = 0
-
+#Function to access dealer / player score
+def access_score(person):
+  """person = player/dealer"""
+  return blackjack_info[person]["score"]
   
-  def draw_card():
-    draw = random.choice(cards)
-    return draw
+#To draw card
+def draw_card(person):
+  access_cards(person).append(random.choice(cards))
+  def sum_card():
+    blackjack_info[person]["score"] = sum(access_cards(person))
+  sum_card()
 
 
-#! INSTEAD OF DIVIDING BETWEEN THE PLAYER AND THE DEALER STARTING CARDS JUST PUT THEM INSIDE A DICTIONARY
-  #PLAYER STARTING CARDS
-  player_starting_deck = [draw_card(), draw_card()]
-  player_cards.extend(player_starting_deck)
-  player_cards_summed = sum(player_cards)
-  print(f"Your cards: {player_cards}, current score: {player_cards_summed}")
-  
-  #DEALER STARTING CARDS
-  dealer_starting_deck = [draw_card(), draw_card()]
-  dealer_cards.extend(dealer_starting_deck)
-  # dealer_cards_summed = sum(dealer_cards)
-  print(f"Dealer's first card: {dealer_cards[0]}")
-  
-  def player_turn():
-    is_hit = False
-    while not is_hit:
-      action = input("Type 'h' to HIT, type 's' to STAND: ")
-      if action == "h":
-        player_cards.append(draw_card())
-        player_cards_summed = sum(player_cards)
-        print(f"Your cards: {player_cards}, current score: {player_cards_summed}")
-        print(f"Dealer's first card: {dealer_cards[0]}")
-    
-    #2.DEALER TURNS IS EXECUTED AFTER PLAYER DECIDED TO STAND, IF PLAYER WENT OVER 21 AFTER DECIDING TO HIT, SKIP THE DEALER TURNS (return), AND IMMEDIATELY DECLARE THE RESULTS.
-    
-        if player_cards_summed > 21:
-          is_hit = True
-          player_loss = True
-          # print("You went over. You lose lol")
-          return
-#IF THE PLAYER WENT OVER 21 THE GAME ENDS HERE.
-      else:
-        is_hit = True
-
-  player_turn()
-    
-  #DEBUGGING
-  # print(player_cards)
-  # print(dealer_cards)
-
-  ##DEALER'S TURN##  
-  #IF DEALER'S SCORE IS HIGHER THAN THE PLAYER THEN ITS A LOSS FOR PLAYER.
-  while dealer_cards_summed < 17:
-    dealer_cards.append(draw_card())
-  
-  dealer_cards_summed = sum(dealer_cards)
-  player_cards_summed = sum(player_cards)  
-  if dealer_cards_summed > player_cards_summed:
-    player_loss = True
-  else:
-    player_loss = False
-
-  
-
-  print(f"Your final hand: {player_cards}, final score: {player_cards_summed}")
-  print(f"Computer's final hand: {dealer_cards}, final score: {dealer_cards_summed}")
-
-  if player_loss:
-    print("You Lose")
-    
+#Starting cards
+draw_card("player"), draw_card("player")
+draw_card("dealer"), draw_card("dealer")
 
 
+#Debugging
+# draw_card("player")
+print(blackjack_info)
 
-blackjack()
+print(f"Your cards: {access_cards('player')}, current score: {access_score('player')}")
+print(f"Dealer's first card: {access_cards('dealer')[0]}")
+direction = input("Type 'h' to hit, type 's' to stand:")
 
-#FINAL HAND
+if direction == "h":
+  draw_card("player")
 
