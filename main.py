@@ -54,20 +54,64 @@ def draw_card(person):
     blackjack_info[person]["score"] = sum(access_cards(person))
   sum_card()
 
+#Play game function IMPORTANT
+  #Starting cards
+def play_game():
+  draw_card("player"), draw_card("player")
+  draw_card("dealer"), draw_card("dealer")
+  
+  
+  #Debugging
+  # draw_card("player")
+  print(blackjack_info)
+  
+    
+  over = False
+  while not over:
+    print(f"Your cards: {access_cards('player')}, current score: {access_score('player')}")
+    print(f"Dealer's first card: {access_cards('dealer')[0]}")
+  #Ask the player
+    direction = input("Type 'h' to hit, type 's' to stand:")
+    if direction == "h":
+      draw_card("player")
+      #If the player score went over 21 its a BUST'
+      if access_score("player") > 21:
+        over = True
+        print(f"Your final hand is {access_cards('player')} final score: {access_score('player')}")
+        print(f"Dealer's final hand: {access_cards('dealer')}, final score: {access_score('dealer')}")
+        
+        print("You went over, you lose.")
+        return
+    else:
+      over = True
+      #While dealer score is under 17, keep drawing card.
+  while access_score("dealer") < 17:
+    draw_card("dealer")
+    #If the dealer score went over 21, DEALER BUST.
+    if access_score("dealer") > 21:
+      # return "dealer_bust"
+      print(f"Your final hand is {access_cards('player')} final score: {access_score('player')}")
+      print(f"Dealer's final hand: {access_cards('dealer')}, final score: {access_score('dealer')}")
 
-#Starting cards
-draw_card("player"), draw_card("player")
-draw_card("dealer"), draw_card("dealer")
+      print("Dealer went over, you win.")
+      return
+  #While the dealer score is more than 17 and doesnt exceed 21 then proceed to calculation on which has the higher score.
 
+  #Won by higher score
+  if access_score("player") > access_score("dealer"):
+    print(f"Your final hand is {access_cards('player')} final score: {access_score('player')}")
+    print(f"Dealer's final hand: {access_cards('dealer')}, final score: {access_score('dealer')}")
 
-#Debugging
-# draw_card("player")
-print(blackjack_info)
+    print("You win")
+    return
+  #Lose by lower score
+  else:
+    print(f"Your final hand is {access_cards('player')} final score: {access_score('player')}")
+    print(f"Dealer's final hand: {access_cards('dealer')}, final score: {access_score('dealer')}")
 
-print(f"Your cards: {access_cards('player')}, current score: {access_score('player')}")
-print(f"Dealer's first card: {access_cards('dealer')[0]}")
-direction = input("Type 'h' to hit, type 's' to stand:")
+    print("You lose!!")
+    return
+  
 
-if direction == "h":
-  draw_card("player")
-
+#Calling the game function:
+play_game()
